@@ -1,3 +1,4 @@
+import { FC, PropsWithChildren } from 'react';
 import NextLink from 'next/link';
 import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from '@mui/material';
 import { initialData } from '../../database/products';
@@ -9,9 +10,11 @@ const producstInCart = [
     initialData.products[2]
 ];
 
-export const CartList = () => {
+interface Props{
+    editable: boolean;
+}
 
-    
+export const CartList: FC<PropsWithChildren<Props>> = ({editable = false}) => {
 
     return (
         <>
@@ -38,15 +41,24 @@ export const CartList = () => {
                                 <Typography variant='body1'>Talla: <strong>M</strong></Typography>
 
                                 {/* Conditional */}
-                                <ItemCounter />
+                                {
+                                    editable
+                                    ? <ItemCounter />
+                                    : <Typography variant='h4'>3 items</Typography>
+                                }
                             </Box>
                         </Grid>
                         <Grid item xs={2} display='flex' alignItems='center' flexDirection='column'>
                             <Typography variant='subtitle1'>{`$${product.price}`}</Typography>
                             {/* Editable */}
-                            <Button variant='text' color='secondary'>
-                                Remover
-                            </Button>
+                            {
+                                editable &&
+                                (
+                                    <Button variant='text' color='secondary'>
+                                        Remover
+                                    </Button>    
+                                )
+                            }
                         </Grid>
                     </Grid>
                 ))
