@@ -1,7 +1,7 @@
 
 
-export * from './kid';
-export * from './men';
-export * from './women';
+export { default as KidPage } from './kid';
+export { default as MenPage } from './men';
+export { default as WomenPage } from './women';
 
 
