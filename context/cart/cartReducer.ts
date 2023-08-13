@@ -13,6 +13,11 @@ export const cartReducer = ( state: CartState, action: CartActionType ): CartSta
             return {
                 ...state
             }
+        case '[Cart] - Add Product':
+            return {
+                ...state
+                // cart...
+            }
         default:
             return state;
     }
