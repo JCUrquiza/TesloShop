@@ -31,6 +31,21 @@ const ProductPage:NextPage<Props> = ({ product }) => {
         })); 
     } 
 
+    const onUpdatedQuantity = (quantity: number) => {
+        setTempCartProduct( currentProduct => ({
+            ...currentProduct,
+            quantity
+        })); 
+    } 
+
+    const updatedNowQuantity = () => {
+        console.log('hey');
+    } 
+
+    const onAddProduct = () => {
+        console.log({ tempCartProduct });
+    }
+
     return (
         <ShopLayout title={ product.title } pageDescription={ product.description }>
 
@@ -49,18 +64,29 @@ const ProductPage:NextPage<Props> = ({ product }) => {
 
                         <Box sx={{ my:2 }}>
                             <Typography variant='subtitle2'>Cantidad</Typography>
-                            <ItemCounter />
+
+                            <ItemCounter 
+                                currentValue={ tempCartProduct.quantity }
+                                updateQuantity={ onUpdatedQuantity }
+                                maxValue={ product.inStock > 5 ? 5 : product.inStock }
+                            />
+                            
                             <SizeSelector 
                                 sizes={product.sizes} 
                                 selectedSize={tempCartProduct.size}
-                                onSelectedSize={ selectedSize}
+                                onSelectedSize={ selectedSize }
                             />
+
                         </Box>
 
                         {
                             (product.inStock > 0)
                                 ? (
-                                    <Button color='secondary' className='circular-btn'>
+                                    <Button 
+                                        color='secondary' 
+                                        className='circular-btn'
+                                        onClick={ onAddProduct }
+                                    >
                                         {
                                             tempCartProduct.size
                                                 ? 'Agregar al carrito'
