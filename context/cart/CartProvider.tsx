@@ -24,9 +24,25 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         }
     }, [])
     
-
+    // React recomienda que cada efecto haga sólo una tarea en espesífico:
     useEffect(() => {
         Cookie.set('cart', JSON.stringify(state.cart));
+    }, [state.cart])
+
+    useEffect(() => {
+
+        // Por iteración se suman los elementos
+        const numberOfItems = state.cart.reduce( (prev, current) => current.quantity + prev, 0 );
+        const subTotal = state.cart.reduce( (prev, current) => (current.price * current.quantity) + prev, 0 );
+        const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE) || 0;
+        
+        const orderSummary = {
+            numberOfItems,
+            subTotal,
+            tax: subTotal * taxRate,
+            total: subTotal * (taxRate + 1)
+        }
+
     }, [state.cart])
     
 
@@ -65,12 +81,19 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         dispatch({ type: '[Cart] - Change cart quantity', payload: product })
     }
 
+    const removeCartProduct = (product: ICartProduct) => {
+        console.log(product);
+        dispatch({ type: '[Cart] - Remove product in cart', payload: product })
+        
+    }
+
     return (
         <CartContext.Provider value={{
             ...state,
             // Methods
             addProductToCart,
-            updateCartQuantity
+            updateCartQuantity,
+            removeCartProduct
         }}>
             { children }
         </CartContext.Provider>
