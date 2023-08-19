@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
@@ -7,6 +7,7 @@ import { ProductSlideshow, SizeSelector } from '../../../components/products';
 import { ItemCounter } from '../../../components/ui';
 import { ICartProduct, IProduct, ISize } from '../../../interfaces';
 import { dbProducts } from '../../../database';
+import { CartContext } from '../../../context';
 
 interface Props {
     product: IProduct
@@ -15,6 +16,9 @@ interface Props {
 const ProductPage:NextPage<Props> = ({ product }) => {
 
     const router = useRouter();
+
+    // const { toggleSideMenu } = useContext(UIContext);
+    const { addProductToCart } = useContext(CartContext);
 
     const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
         _id: product._id,
@@ -46,8 +50,9 @@ const ProductPage:NextPage<Props> = ({ product }) => {
         if ( !tempCartProduct.size ) return;
 
         // TODO: Llamar la acción del context para agregar al carrito
-        router.push('/cart');
-
+        addProductToCart(tempCartProduct);
+        
+        // router.push('/cart');
         console.log({ tempCartProduct });
     }
 
