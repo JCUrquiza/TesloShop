@@ -55,7 +55,7 @@ export const ProductCard: FC<PropsWithChildren<Props>> = ({ product }) => {
 
       <Box sx={{ mt: 1, display: isImageLoaded ? 'block' : 'none' }} className='fadeIn'>
         <Typography fontWeight={700}>{ product.title }</Typography>
-        <Typography fontWeight={500}>{ `$${product.price}` }</Typography>
+        <Typography fontWeight={500}>${ product.prices }</Typography>
       </Box>
 
     </Grid>

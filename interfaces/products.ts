@@ -3,7 +3,7 @@ export interface IProduct {
     description: string;
     images: string[];
     inStock: number;
-    price: number;
+    prices: number;
     sizes: ISize[];
     slug: string;
     tags: string[];

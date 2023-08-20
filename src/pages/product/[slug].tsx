@@ -23,7 +23,7 @@ const ProductPage:NextPage<Props> = ({ product }) => {
     const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
         _id: product._id,
         images: product.images[0],
-        price: product.price,
+        price: product.prices,
         size: undefined,
         slug: product.slug,
         title: product.title,
@@ -70,7 +70,7 @@ const ProductPage:NextPage<Props> = ({ product }) => {
                     <Box display='flex' flexDirection='column'>
 
                         <Typography variant='h1' component='h1'>{ product.title }</Typography>
-                        <Typography variant='subtitle1' component='h2'>{`$${product.price}`}</Typography>
+                        <Typography variant='subtitle1' component='h2'>{`$${product.prices}`}</Typography>
 
                         <Box sx={{ my:2 }}>
                             <Typography variant='subtitle2'>Cantidad</Typography>

@@ -43,6 +43,9 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             total: subTotal * (taxRate + 1)
         }
 
+        console.log(orderSummary);
+        
+
     }, [state.cart])
     
 
@@ -82,9 +85,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     }
 
     const removeCartProduct = (product: ICartProduct) => {
-        console.log(product);
         dispatch({ type: '[Cart] - Remove product in cart', payload: product })
-        
     }
 
     return (
