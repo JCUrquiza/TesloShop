@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { AppBar, Toolbar, Link, Typography, Box, Button, IconButton, Badge, Input, InputAdornment } from '@mui/material';
 import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
-import { UIContext } from '../../context';
+import { CartContext, UIContext } from '../../context';
 
 export const Navbar = () => {
 
@@ -11,6 +11,7 @@ export const Navbar = () => {
     const activeLink = (href: string) => href === router.asPath ? 'primary' : 'info';
 
     const { toggleSideMenu } = useContext(UIContext);
+    const { numberOfItems } = useContext(CartContext);
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -99,7 +100,7 @@ export const Navbar = () => {
                 <NextLink href='/cart' passHref legacyBehavior>
                     <Link>
                         <IconButton>
-                            <Badge badgeContent={ 2 } color="secondary">
+                            <Badge badgeContent={ numberOfItems > 9 ? '+9' : numberOfItems } color="secondary">
                                 <ShoppingCartOutlined />
                             </Badge>
                         </IconButton>

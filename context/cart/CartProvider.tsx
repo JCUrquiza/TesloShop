@@ -5,10 +5,18 @@ import { ICartProduct } from '../../interfaces';
 
 export interface CartState {
     cart: ICartProduct[];
+    numberOfItems: number;
+    subTotal: number;
+    tax: number;
+    total: number;
 }
 
 const CART_INITIAL_STATE: CartState = {
-    cart: []
+    cart: [],
+    numberOfItems: 0,
+    subTotal: 0,
+    tax: 0,
+    total: 0
 }
 
 export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -30,7 +38,6 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     }, [state.cart])
 
     useEffect(() => {
-
         // Por iteración se suman los elementos
         const numberOfItems = state.cart.reduce( (prev, current) => current.quantity + prev, 0 );
         const subTotal = state.cart.reduce( (prev, current) => (current.price * current.quantity) + prev, 0 );
@@ -43,8 +50,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             total: subTotal * (taxRate + 1)
         }
 
-        console.log(orderSummary);
-        
+        dispatch({ type: '[Cart] - Update order summary', payload: orderSummary })
 
     }, [state.cart])
     
