@@ -25,6 +25,18 @@ export default NextAuth ({
         // ...add more providers here
     ],
 
+    // Custom pages
+    pages: {
+        signIn: '/auth/login',
+        newUser: '/auth/register'
+    },
+
+    session: {
+        maxAge: 2592000, // 30 días
+        strategy: 'jwt',
+        updateAge: 86400 // cada día
+    },
+
     // Callbacks
     callbacks: {
         async jwt({ token, account, user }) {
@@ -33,7 +45,7 @@ export default NextAuth ({
                 token.accessToken = account.access_token;
                 switch ( account.type ) {
                     case 'oauth':
-                        // TODO: Crear usuario o verificar si existe en mi DB
+                        token.user = await dbUsers.oAuthToDbUser( user?.email || '', user?.name || '' );
                         break;
                     case 'credentials':
                         token.user = user;
