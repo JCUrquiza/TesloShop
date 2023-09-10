@@ -3,13 +3,14 @@ import NextLink from 'next/link';
 import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from '@mui/material';
 import { ItemCounter } from '../ui';
 import { CartContext } from '../../context';
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, IOrderItem } from '../../interfaces';
 
 interface Props{
     editable?: boolean;
+    products?: IOrderItem[];
 }
 
-export const CartList: FC<PropsWithChildren<Props>> = ({editable = false}) => {
+export const CartList: FC<PropsWithChildren<Props>> = ({editable = false, products = []}) => {
 
     const { cart, updateCartQuantity, removeCartProduct } = useContext(CartContext);
 
@@ -18,10 +19,12 @@ export const CartList: FC<PropsWithChildren<Props>> = ({editable = false}) => {
         updateCartQuantity( product );
     }
 
+    const productToShow = products ? products : cart;
+
     return (
         <>
             {
-                cart.map( product => (
+                productToShow.map( product => (
                     <Grid container key={ product.slug + product.size } spacing={2} sx={{mb:1}}>
                         <Grid item xs={3}>
                             {/* TODO: Llevar a la página del producto */}
@@ -29,7 +32,7 @@ export const CartList: FC<PropsWithChildren<Props>> = ({editable = false}) => {
                                 <Link>
                                     <CardActionArea>
                                         <CardMedia
-                                            image={`/products/${product.images}`}
+                                            image={`/products/${product.image}`}
                                             component='img'
                                             sx={{ borderRadius: '5px' }}
                                         />
@@ -49,7 +52,7 @@ export const CartList: FC<PropsWithChildren<Props>> = ({editable = false}) => {
                                         <ItemCounter 
                                             currentValue={ product.quantity }
                                             maxValue={ 10 }
-                                            updateQuantity={(value) => onNewCartQuantityValue(product, value)}
+                                            updateQuantity={(value) => onNewCartQuantityValue(product as ICartProduct, value)}
                                         />
                                     ) 
                                     : (
@@ -64,7 +67,7 @@ export const CartList: FC<PropsWithChildren<Props>> = ({editable = false}) => {
                             {
                                 editable &&
                                 (
-                                    <Button variant='text' color='secondary' onClick={() => removeCartProduct(product)}>
+                                    <Button variant='text' color='secondary' onClick={() => removeCartProduct(product as ICartProduct)}>
                                         Remover
                                     </Button>    
                                 )
