@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 import { CartContext } from '../../../context';
@@ -39,7 +39,12 @@ const CartPage = () => {
                             <OrderSummary />
 
                             <Box sx={{mt:3}}>
-                                <Button color='secondary' className='circular-btn' fullWidth>
+                                <Button 
+                                    color='secondary' 
+                                    className='circular-btn' 
+                                    fullWidth 
+                                    onClick={ () => {router.push('/checkout/summary')} }
+                                >
                                     Checkout
                                 </Button>
                             </Box>

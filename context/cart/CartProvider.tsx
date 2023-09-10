@@ -1,7 +1,9 @@
 import { FC, PropsWithChildren, useEffect, useReducer } from 'react';
 import Cookie from 'js-cookie';
+
+import { ICartProduct, IOrder, ShippingAddress } from '../../interfaces';
 import { CartContext, cartReducer } from './';
-import { ICartProduct } from '../../interfaces';
+import { tesloApi } from '../../api';
 
 export interface CartState {
     isLoaded: boolean;
@@ -11,17 +13,6 @@ export interface CartState {
     tax: number;
     total: number;
     shippingAddress?: ShippingAddress;
-}
-
-export interface ShippingAddress {
-    firstName: string;
-    lastName: string;
-    address: string;
-    address2?: string;
-    zip: string;
-    city: string;
-    country: string;
-    phone: string;
 }
 
 const CART_INITIAL_STATE: CartState = {
@@ -139,6 +130,35 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         dispatch({ type: '[Cart] - Update Address', payload: address });
     }
 
+    const createOrder = async() => {
+
+        if ( !state.shippingAddress ) {
+            throw new Error('No hay dirección de entrega');
+        }
+
+        const body: IOrder = {
+            orderItems: state.cart.map( p => ({
+                ...p,
+                size: p.size!,
+                image: p.images!
+            })),
+            shippingAddress: state.shippingAddress,
+            numberOfItems: state.numberOfItems,
+            subTotal: state.subTotal,
+            tax: state.tax,
+            total: state.total,
+            isPaid: false
+        }
+
+        try {
+            const { data } = await tesloApi.post('/orders', body);
+            console.log({ data });
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     return (
         <CartContext.Provider value={{
             ...state,
@@ -146,7 +166,9 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             addProductToCart,
             removeCartProduct,
             updateCartQuantity,
-            updateAddress
+            updateAddress,
+            // Orders
+            createOrder
         }}>
             { children }
         </CartContext.Provider>
