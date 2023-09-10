@@ -9,7 +9,7 @@ import { dbOrders } from '../../../database';
 import { IOrder } from '../../../interfaces';
 
 interface Props {
-    order: IOrder
+    order: IOrder;
 }
 
 const OrderPage: NextPage<Props> = ({ order }) => {
@@ -41,7 +41,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                 )
             }
 
-            <Grid container>
+            <Grid container className='fadeIn'>
                 <Grid item xs={12} sm={7}>
                     <CartList products={ order.orderItems } />
                 </Grid>
@@ -64,19 +64,31 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 
                             <Divider sx={{my:1}} />
                             
-                            <OrderSummary />
+                            <OrderSummary 
+                                orderValues={{
+                                    numberOfItems: order.numberOfItems,
+                                    subTotal: order.subTotal,
+                                    tax: order.tax,
+                                    total: order.total
+                                }} 
+                            />
 
-                            <Box sx={{mt:3}}>
+                            <Box sx={{mt:3}} display='flex' flexDirection='column'>
                                 {/* TODO */}
-                                <h1>Pagar</h1>
 
-                                <Chip
-                                    sx={{my:2}}
-                                    label='Orden ya fue pagada'
-                                    variant='outlined'
-                                    color='success'
-                                    icon={ <CreditScoreOutlined /> }
-                                />
+                                {
+                                    order.isPaid ? (
+                                        <Chip
+                                            sx={{my:2}}
+                                            label='Orden ya fue pagada'
+                                            variant='outlined'
+                                            color='success'
+                                            icon={ <CreditScoreOutlined /> }
+                                        />
+                                    ) : (
+                                        <h1>Pagar</h1>
+                                    )
+                                }
 
                             </Box>
 
